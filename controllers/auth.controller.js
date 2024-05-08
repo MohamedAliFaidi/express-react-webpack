@@ -2,6 +2,7 @@
 const User = require("../models/user.model")
 const bcrypt = require("bcrypt")
 const connect = require("../lib/db")
+const jwt = require("jsonwebtoken")
 const register = async (req, res) => {
     try {
         await connect()
@@ -23,5 +24,36 @@ const register = async (req, res) => {
 }
 
 
+const login = async (req, res) => {
+    try {
+        await connect()
+        const isUser = await User.findOne({ email: req.body.email });
+        if (!isUser) {
+            return res.status(400).json({ message: "user not found" });
+        }
+        const match = await bcrypt.compare(req.body.password, isUser.password);
+        if (!match) {
+            return res.status(401).json({ message: "wrong password" });
+        }
+        const exp = Date.now() + 1000 * 60 * 60;
+        const token = jwt.sign(
+            { id: isUser._id, exp, },
+            process.env.SECRET_KEY
+        );
+        res
+            .cookie("Authorization", token)
+            .status(200)
+            .json({
+                user: {
+                    email: isUser.email,
+                    _id: isUser._id,
+                },
+            });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "error",error });
+    }
+}
 
-module.exports = { register }
+
+module.exports = { register, login }
