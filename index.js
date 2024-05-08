@@ -8,7 +8,6 @@ require("dotenv").config()
 const helmet = require("helmet")
 
 
-console.log(process.env.REACT);
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
 app.use(helmet.frameguard({ action: "deny" }));
