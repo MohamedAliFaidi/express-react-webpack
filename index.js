@@ -4,10 +4,13 @@ const path = require("path")
 const app = express()
 require("dotenv").config()
 
-
 const helmet = require("helmet")
+const cookieParser = require('cookie-parser')
 
+app.use(require("cors")({origin:process.env.REACT , credentials: true}))
 
+app.use(cookieParser())
+app.use(express.json())
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
 app.use(helmet.frameguard({ action: "deny" }));
@@ -19,7 +22,7 @@ app.use(helmet.dnsPrefetchControl());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-
+      
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", "https://res.cloudinary.com"],
       scriptSrc: ["'self'"],
@@ -36,8 +39,6 @@ app.use((req, res, next) => {
 });
 
 
-
-app.use(express.json())
 
 
 app.use("/api", require("./routes/indexRoutes"))

@@ -5,6 +5,9 @@ const app = express.Router()
 
 app.post("/register", require("../controllers/auth.controller").register)
 app.post("/login", require("../controllers/auth.controller").login)
+app.post("/send-email", require("../controllers/auth.controller").sendEmail)
+app.post("/verify-email", require("../controllers/auth.controller").verifyEmail)
+
 
 
 
