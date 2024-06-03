@@ -1,26 +1,19 @@
-import { Link } from "react-router-dom";
-// import Search from "./Search";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserStore } from "../../stores/userStore";
+import toast from "react-hot-toast";
 
 const Menu = () => {
+ const  navigate = useNavigate()
+  const { user,setUser } = useUserStore();
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
         <div className="flex flex-wrap items-center">
           <div className="flex-shrink-0 mr-5">
-            <Link to="/">
-              <img
-                src="logo192.png"
-                style={{ height: "50px", width: "60px" }}
-                height="40"
-                width="120"
-                alt="Logo"
-              />
-            </Link>
+            <Link to="/">LOGO</Link>
           </div>
-          {/* <Search /> */}
 
-          <div className="flex items-center space-x-2 ml-auto">
-       
+          {!user ? (
             <Link
               to="/auth/login"
               className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
@@ -28,22 +21,33 @@ const Menu = () => {
               <i className="text-gray-400 w-5 fa fa-user"></i>
               <span className="hidden lg:inline ml-1">Sign in</span>
             </Link>
-      
-            {/* <Link to="/me">
-              <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                <img className="w-10 h-10 rounded-full" src={"logo192.png"} />
-                <div className="space-y-1 font-medium">
-                  <p>
-                    Ghulam
-                    <time className="block text-sm text-gray-500 dark:text-gray-400">
-                      test@gmail.com
-                    </time>
-                  </p>
-                </div>
-              </div>
-            </Link> */}
-          </div>
-
+          ) : (
+            <Link className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300">
+              <i className="text-gray-400 w-5 fa fa-user"></i>
+              <button
+                onClick={() => {
+                  import("../../services/auth.service").then(async (module) => {
+                    await module.logout();
+                    setUser(null)
+                    navigate("/auth/login")
+                    toast.success("Good bye")
+                  });
+                }}
+                className="hidden lg:inline ml-1"
+              >
+                Logout
+              </button>
+            </Link>
+          )}
+          {user && (
+            <Link
+              to="/user/profile"
+              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+            >
+              <i className="text-gray-400 w-5 fa fa-user"></i>
+              <span className="hidden lg:inline ml-1">Profile</span>
+            </Link>
+          )}
           <div className="lg:hidden ml-2">
             <button
               type="button"

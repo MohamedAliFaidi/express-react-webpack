@@ -3,9 +3,10 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import Password from "./Password";
+import toast from "react-hot-toast";
 
-function Email({ isVerified ,email }) {
-    console.log(isVerified);
+function Email({ isVerified, email ,isCreated }) {
+  console.log(isVerified);
   const [constants] = useState({
     EMAIL_REGEX:
       /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -33,8 +34,12 @@ function Email({ isVerified ,email }) {
             onSubmit={(values) => {
               import("../../../services/auth.service")
                 .then((module) => module.sendEmail(values))
-                .then((res) => console.log(res.data))
-                .catch((e) => console.log(e));
+                .then((res) =>
+                  toast.success("Email sent please verify your inbox")
+                )
+                .catch((e) => {
+                  toast.error(e.response.data.message);
+                });
             }}
           >
             {({ errors, touched }) => (
@@ -77,8 +82,8 @@ function Email({ isVerified ,email }) {
           </p>
         </div>
       ) : (
-        <Password email={email}/>
-      )}
+        <Password  isCreated={isCreated} email={email} />
+      )} 
     </>
   );
 }

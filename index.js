@@ -7,7 +7,6 @@ require("dotenv").config()
 const helmet = require("helmet")
 const cookieParser = require('cookie-parser')
 
-app.use(require("cors")({origin:process.env.REACT , credentials: true}))
 
 app.use(cookieParser())
 app.use(express.json())
@@ -23,18 +22,27 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       
-      defaultSrc: ["'self'"],
+      defaultSrc: ["'self'",process.env.REACT],
       imgSrc: ["'self'", "https://res.cloudinary.com"],
-      scriptSrc: ["'self'"],
-      connectSrc: ["'self'"],
+      scriptSrc: ["'self'",process.env.REACT],
+      connectSrc: ["'self'",process.env.REACT],
     },
   })
 );
 
+
+   
+const cors = require('cors')
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true
+}))
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.REACT);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); 
+  
   next();
 });
 

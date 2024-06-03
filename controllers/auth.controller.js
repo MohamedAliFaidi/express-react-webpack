@@ -53,6 +53,15 @@ const login = async (req, res) => {
 
 const sendEmail = async (req, res) => {
   try {
+    await connect()
+
+    const user = await User.findOne({email:req.body.email})
+    if(user){
+      return res.status(400).json({ message: "User Already Exist" });
+
+
+    }
+
     const mailer = require("../lib/mailer");
     const exp = Date.now() + 1000 * 60 * 60;
     const token = jwt.sign(
@@ -87,7 +96,9 @@ const verifyEmail = async (req, res) => {
       const promise = await Promise.findOne({ email: decoded.email });
       console.log(promise);
       if (decoded.email == promise.email)
-        return res.status(200).json({ message: "email validated" ,email:promise.email });
+        return res
+          .status(200)
+          .json({ message: "email validated", email: promise.email });
     }
 
     res.status(400).json({ message: "failed verifying email" });
@@ -97,4 +108,16 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-module.exports = { register, login, sendEmail, verifyEmail };
+const logout = async (req, res) => {
+  try {
+    res
+      .clearCookie("Authorization")
+      .status(204)
+      .json({ message: "logged out" });
+  } catch (error) {
+    console.log();
+    res.status(500).json({ message: "mail error" });
+  }
+};
+
+module.exports = { register, login, sendEmail, verifyEmail,logout };

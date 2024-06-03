@@ -12,7 +12,7 @@ const privateRoutes = require("./private.routes")
 
 
 app.use("/auth", authRoutes)
-app.use("/profile",require("../middleware") , privateRoutes)
+app.use("/user",require("../middleware") , privateRoutes)
 
 
 

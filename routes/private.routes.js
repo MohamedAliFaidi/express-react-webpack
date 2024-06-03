@@ -3,7 +3,7 @@ const express = require("express")
 
 const app = express.Router()
 
-app.get("/update" ,require("../controllers/private.controller").private)
+app.get("/check-auth" ,require("../controllers/private.controller").private)
 
 
 

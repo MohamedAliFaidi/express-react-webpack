@@ -2,8 +2,14 @@ import { Link } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useUserStore } from "../../stores/userStore";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate()
+
+  const {setUser} = useUserStore()
   const [constants] = useState({
     EMAIL_REGEX:
       /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -39,7 +45,16 @@ function Login() {
         onSubmit={(values) => {
           import("../../services/auth.service")
             .then(async (module) => await module.login(values))
-            .then((res) => console.log(res)).catch(e=>console.log(e))
+            .then((res) => {
+              toast.success("Login Success");
+              setUser(res.user)
+              navigate("/")
+              return res;
+            })
+            .catch((e) => {
+              toast.error(e.response.data.message);
+              console.log(e);
+            });
         }}
       >
         {({ errors, touched }) => (

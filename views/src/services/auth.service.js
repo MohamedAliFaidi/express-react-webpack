@@ -1,4 +1,4 @@
-import { AxiosClient } from "../lib/axiosClient";
+import { AxiosClient, AxiosClientAuth } from "../lib/axiosClient";
 
 export const register = async (body) => {
   return AxiosClient.post("/api/auth/register", body).then((res) => res.data)
@@ -7,7 +7,7 @@ export const register = async (body) => {
 
 
 export const login = async (body) => {
-  return AxiosClient.post("/api/auth/login", body).then((res) => res.data)
+  return AxiosClientAuth.post("/api/auth/login", body).then((res) =>  res.data)
 };
 
 
@@ -18,4 +18,14 @@ export const sendEmail = async (body) => {
 
 export const verifyEmail = async (body) => {
   return AxiosClient.post("/api/auth/verify-email", body).then((res) => res.data)
+};
+
+
+export const checkAuth = async (body) => {
+  return AxiosClientAuth.get("/api/user/check-auth", body).then((res) => res.data)
+};
+
+
+export const logout = async (body) => {
+  return AxiosClientAuth.get("/api/auth/logout", body).then((res) => res.data)
 };

@@ -3,9 +3,14 @@ import Email from "./chunks/Email";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
+
 function Register() {
   const location = useLocation();
   const [isVerified, setIsVerified] = useState(false);
+  const [isCreated, setIsCreated] = useState(false);
+
+
+
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -18,6 +23,7 @@ function Register() {
           toast.success("Email vaildated succefully");
           setIsVerified(true);
           setEmail(res.email);
+
           return res.data;
         })
         .catch((e) => console.log(e));
@@ -88,7 +94,7 @@ function Register() {
           Sign in
         </Link>
       </p> */}
-      <Email isVerified={isVerified} email={email} />
+      <Email isCreated={isCreated} isVerified={isVerified} email={email} />
     </div>
   );
 }

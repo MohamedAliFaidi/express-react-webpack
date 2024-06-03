@@ -1,9 +1,13 @@
 import { Formik, Form, Field } from "formik";
-import { useState } from "react";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Password({ email }) {
+  const navigate = useNavigate();
+  const [isCreated, setIsCreated] = useState(false);
+
   const [PASSWORD_REGEX] = useState(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/
   );
@@ -22,6 +26,10 @@ function Password({ email }) {
     })
   );
 
+  useEffect(() => {
+    isCreated === true ? navigate("/auth/login") : null;
+  }, [isCreated]);
+
   return (
     <div>
       {" "}
@@ -37,9 +45,8 @@ function Password({ email }) {
               module.register({ email, password: values.password })
             )
             .then((res) => {
-              toast.success("Email vaildated succefully");
-              setIsVerified(true);
-              setEmail(res.email);
+              toast.success("Account created succefully");
+              setIsCreated(true);
               return res.data;
             })
             .catch((e) => console.log(e));
