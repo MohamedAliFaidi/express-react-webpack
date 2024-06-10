@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 const Menu = () => {
  const  navigate = useNavigate()
-  const { user,setUser } = useUserStore();
+ const [user,setUser]=useUserStore((state)=>[state.user,state.setUser])
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">

@@ -1,4 +1,23 @@
+import { useState } from "react";
+
 function Profile() {
+  const [update, setUpdate] = useState(true);
+  const [Avatar, setAvatar] = useState("");
+
+  const onFileChange = (e) => {
+    if (e.target?.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatar(reader.result);
+        }
+      };
+
+      setAvatar(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
   return (
     <>
       <section className="py-10">
@@ -7,11 +26,37 @@ function Profile() {
             <main className="md:w-2/3 lg:w-3/4 px-4">
               <figure className="flex items-start sm:items-center">
                 <div className="relative">
-                  <img
-                    className="w-16 h-16 rounded-full mr-4"
-                    src={"/logo192.png"}
-                    alt={"user name"}
-                  />
+                  {!update ? (
+                    <img
+                      className="w-16 h-16 rounded-full mr-4"
+                      src={"/default_avatar.png"}
+                      alt={"user name"}
+                    />
+                  ) : (
+                    <div>
+                      <img
+                        className="w-16 h-16 rounded-full mr-4"
+                        src={Avatar}
+                        alt={"user name"}
+                      />
+                      <input onChange={onFileChange} type="file" />
+                      <button
+                        onClick={() => {
+                          import("../../services/user.services").then(
+                            (module) => {
+                              module
+                                .updatePRofilePicture({ picture: Avatar })
+                                .then((res) => {
+                                  console.log(res);
+                                });
+                            }
+                          );
+                        }}
+                      >
+                        Upload
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <figcaption>
                   <h5 className="font-semibold text-lg">Ghulam</h5>
@@ -23,8 +68,6 @@ function Profile() {
               </figure>
 
               <hr className="my-4" />
-
-        
 
               <hr className="my-4" />
             </main>

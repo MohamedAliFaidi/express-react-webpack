@@ -5,6 +5,7 @@ import Menu from "./components/layouts/Menu";
 import UserIndex from "./components/user/UserIndex";
 import User from "./components/HOC/User";
 import Home from "./components/home/Home";
+import Public from "./components/HOC/Public";
 
 function App() {
   return (
@@ -13,7 +14,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        <Route path="/auth/*" element={<AuthIndex />} />
+        <Route
+          path="/auth/*"
+          element={
+            <Public>
+              <AuthIndex />
+            </Public>
+          }
+        />
         <Route
           path="/user/*"
           element={

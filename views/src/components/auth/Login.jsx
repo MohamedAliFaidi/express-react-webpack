@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate()
 
-  const {setUser} = useUserStore()
+  const [setUser] = useUserStore((state)=>[state.setUser])
   const [constants] = useState({
     EMAIL_REGEX:
       /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

@@ -7,7 +7,6 @@ function AuthIndex() {
     <Routes>
     <Route path='/register'  element={<Register/>}/>
     <Route path='/login'  element={<Login/>}/>
-
    </Routes>
   )
 }
